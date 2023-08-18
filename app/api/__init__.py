@@ -3,7 +3,7 @@ from flask_restful import Api
 
 
 from .resources import \
-    User
+    User, Product
 
 api = Blueprint('api', __name__)
 
@@ -18,6 +18,7 @@ def index():
 # register api resources 
 
 rest_api.add_resource(User, '/user')
+rest_api.add_resource(Product, '/product')
 
 
 
