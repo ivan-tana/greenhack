@@ -7,8 +7,9 @@ user_data_schema = Schema({
     'active': And(str, len),
     'email': And(str, len),
     'user_type': And(str, len),
-    'profile_image': And(str, len),
+    Optional('profile_image'): And(str, len),
     'tel': And(str, len),
     'birthday': And(str, len),
+    "password": And(str, len)
 
 })
