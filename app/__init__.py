@@ -3,6 +3,9 @@ from pathlib import Path
 
 from .api import api as api_blueprint
 
+from .extensions import db
+from . import models
+
 
 def create_app(config_file='config.py'):
     app = Flask("Green Hack")
@@ -15,6 +18,11 @@ def create_app(config_file='config.py'):
     app.register_blueprint(api_blueprint)
 
 
-    print(app.config['SECRET_KEY'])
+    # init database
+
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
 
     return app
