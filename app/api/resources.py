@@ -1,13 +1,33 @@
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import current_user
+
+
 from app import database_manipulations as dbM
 from app.extensions import db
 from app.schema import user_data_schema
-from app.models import USER_TYPES
+from app.models import USER_TYPES, User as UserM
 from app  import is_valid
 
+
+class SingleUser(Resource):
+    def get(self, user_id):
+        user = UserM.query.filter_by(id=user_id).first()
+        if user:
+            return user.dict
+        return {
+            "message": "user dose not exist"
+        }, 400
+
 class User(Resource):
-    def get(self):
+    @jwt_required()
+    def get(self): 
         return dbM.get_users()
+        
+    
+
     
     def post(self):
         user_data_parser = reqparse.RequestParser()
@@ -52,7 +72,29 @@ class User(Resource):
         return {
             "message": "invalid data or incomplite data  data must contain [fname, lname, addre, email, tel,birthday, user-type, profile_image, password]" 
         }, 400
+    
 
+
+
+
+class Login(Resource):
+    def post(self):
+        login_parser = reqparse.RequestParser()
+        login_parser.add_argument('email', required=True, help="email required")
+        login_parser.add_argument('password', required=True, help="password required")
+
+        args = login_parser.parse_args()
+
+        user = UserM.query.filter_by(email = args['email']).first()
+        if user:
+           if  user.check_password(args['password']):
+               return {
+                   'token': create_access_token(identity=args['email'])
+               }
+
+        return{
+            "message": 'invalid login details',
+        }, 401
 
     
 

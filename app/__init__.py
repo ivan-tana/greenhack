@@ -1,6 +1,16 @@
 from flask import Flask
 from pathlib import Path
 
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
+
+
+
+
+
 from .api import api as api_blueprint
 
 from .extensions import db
@@ -16,6 +26,19 @@ def create_app(config_file='config.py'):
     
     # register blueprint
     app.register_blueprint(api_blueprint)
+
+
+    jwt = JWTManager(app)
+
+    @jwt.user_identity_loader
+    def user_identity_lookup(email):
+        return models.User.query.filter_by(email = email)
+    
+    @jwt.user_lookup_loader
+    def user_lookup_callback(_jwt_header, jwt_data):
+        identity = jwt_data["sub"]
+        return models.User.query.filter_by(email=identity).first()
+
 
 
     # init database

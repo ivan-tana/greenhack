@@ -1,4 +1,5 @@
 from .extensions import db
+from werkzeug.security import check_password_hash
 
 from enum import Enum
 
@@ -36,4 +37,8 @@ class User(db.Model):
             'profile_image': self.profile_image,
         }
 
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+        
     
