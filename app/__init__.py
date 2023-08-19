@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from pathlib import Path
 
 from flask_jwt_extended import create_access_token
@@ -28,11 +28,17 @@ def create_app(config_file='config.py'):
     app.register_blueprint(api_blueprint)
 
 
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+
     jwt = JWTManager(app)
 
     @jwt.user_identity_loader
     def user_identity_lookup(user):
         return user.id
+    
     
     @jwt.user_lookup_loader
     def user_lookup_callback(_jwt_header, jwt_data):

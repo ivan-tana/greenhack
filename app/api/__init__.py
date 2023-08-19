@@ -15,9 +15,6 @@ rest_api = Api(api)
 
 
 
-@api.route('/')
-def index():
-    return render_template('index.html')
 
 # register api resources 
 
