@@ -1,15 +1,19 @@
-from schema import Schema, And, Optional
+from schema import Schema, And, Optional   
+from datetime import datetime
 
-
-user_data_schema = Schema(
-    {
-        'fname': And(str, len),
-        Optional('lname'): And(str, len),
-    }
+data_schema = Schema(
+   {
+        'date': datetime,
+        'name': And(str, len),
+        'bool': bool
+   }
 )
 
+
 data = {
-    "fname": "john"
+    'date': datetime.utcnow(),
+    'name': 'g',
+    'bool': False
 }
 
-print(user_data_schema.validate(data))
+print(data_schema.is_valid(data))

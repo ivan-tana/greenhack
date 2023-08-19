@@ -31,13 +31,13 @@ def create_app(config_file='config.py'):
     jwt = JWTManager(app)
 
     @jwt.user_identity_loader
-    def user_identity_lookup(email):
-        return models.User.query.filter_by(email = email)
+    def user_identity_lookup(user):
+        return user.id
     
     @jwt.user_lookup_loader
     def user_lookup_callback(_jwt_header, jwt_data):
         identity = jwt_data["sub"]
-        return models.User.query.filter_by(email=identity).first()
+        return models.User.query.filter_by(id=identity).first()
 
 
 
