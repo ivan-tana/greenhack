@@ -7,10 +7,14 @@ from flask_restful import Api
 from .resources import \
     User, Product, Login, SingleUser, WhoAmI, Product_image
 
-api = Blueprint('api', __name__)
+api = Blueprint('api', __name__, template_folder="templates")
 
 
 rest_api = Api(api)
+
+@api.route('/')
+def index():
+    return render_template('index.html')
 
 
 

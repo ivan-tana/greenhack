@@ -28,9 +28,6 @@ def create_app(config_file='config.py'):
     app.register_blueprint(api_blueprint)
 
 
-    @app.route('/')
-    def index():
-        return render_template('index.html')
 
 
     jwt = JWTManager(app)
