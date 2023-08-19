@@ -23,6 +23,17 @@ class User(db.Model):
     active = db.Column(db.Boolean, default=True)
     profile_image = db.Column(db.Text)
     password = db.Column(db.Text)
+    organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
+
+
+
+class Organization(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.relationship('User', backref='organization')
+    name = db.Column(db.String(30))
+    desc = db.Column(db.Text)
+    type = db.Column(db.String(30))
+
 
     @property
     def dict(self):

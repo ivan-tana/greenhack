@@ -14,9 +14,13 @@ def create_user(user_info: dict, db: SQLAlchemy):
     user = User(
         **user_info
     )
+    try:
 
-    db.session.add(user)
-    db.session.commit()
+        db.session.add(user)
+        db.session.commit()
+    except:
+        return None
+    return user
 
 
 def get_users():

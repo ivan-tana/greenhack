@@ -13,6 +13,7 @@ user_data_schema = Schema({
     Optional('profile_image'): str,
     'tel': And(str, len),
     'birthday': datetime,
-    "password": And(str, len)
+    "password": And(str, len),
+    Optional('organization'): And(str, len)
 
 })

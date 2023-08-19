@@ -12,6 +12,19 @@ from app.schema import user_data_schema
 from app.models import USER_TYPES, User as UserM
 from app  import is_valid
 
+user_request_parser = reqparse.RequestParser()
+
+user_request_parser.add_argument('fname', required=True, help='fname is required' )
+user_request_parser.add_argument('lname', required=True, help='lname is required' )
+user_request_parser.add_argument('address', required=True, help='address is required' )
+user_request_parser.add_argument('email', required=True, help='email is required')
+user_request_parser.add_argument('active', type=bool )
+user_request_parser.add_argument('tel', required=True, help='tel is required')
+user_request_parser.add_argument('birthday', required=True, help='birthday is required')
+user_request_parser.add_argument('user_type',  required=True, help='user_type is required' )
+user_request_parser.add_argument('profile_image' )
+user_request_parser.add_argument('password', required=True, help="password is required" )
+
 
 class SingleUser(Resource):
     def get(self, user_id):
@@ -22,30 +35,20 @@ class SingleUser(Resource):
             "message": "user dose not exist"
         }, 400
     
-    def put(self, user_id):
-        user =  UserM.query.filter_by(id=user_id).first()
-        if not user:
-            return {'message', 'user dose not exsit'}
+    def delete(self, user_id):
+        user = UserM.query.filter_by(id=user_id).first()
+        if user:
+            try: 
+                db.session.delete(user)
+                db.session.commit()
+            except:
+                return {
+                    'message': 'account could not be deleted'
+                }
+        return {
+            'message': 'account deleted'
+        }
         
-        user_request_parser = reqparse.RequestParser()
-
-        user_request_parser.add_argument('fname', required=True, help='fname is required' )
-        user_request_parser.add_argument('lname', required=True, help='lname is required' )
-        user_request_parser.add_argument('address', required=True, help='address is required' )
-        user_request_parser.add_argument('email', required=True, help='email is required')
-        user_request_parser.add_argument('active' )
-        user_request_parser.add_argument('tel', required=True, help='tel is required')
-        user_request_parser.add_argument('birthday', required=True, help='birthday is required')
-        user_request_parser.add_argument('user_type',  required=True, help='user_type is required' )
-        user_request_parser.add_argument('profile_image' )
-        user_request_parser.add_argument('password', required=True, help="password is required" )
-
-
-        args = user_request_parser.parse_args()
-
-        if user_data_schema.is_valid(args):
-            pass
-
 
 
 class User(Resource):
@@ -57,20 +60,7 @@ class User(Resource):
 
     
     def post(self):
-        user_data_parser = reqparse.RequestParser()
-
-        user_data_parser.add_argument('fname', required=True, help='fname is required' )
-        user_data_parser.add_argument('lname', required=True, help='lname is required' )
-        user_data_parser.add_argument('address', required=True, help='address is required' )
-        user_data_parser.add_argument('email', required=True, help='email is required')
-        user_data_parser.add_argument('active', type=bool)
-        user_data_parser.add_argument('tel', required=True, help='tel is required')
-        user_data_parser.add_argument('birthday', required=True, help='birthday is required')
-        user_data_parser.add_argument('user_type',  required=True, help='user_type is required' )
-        user_data_parser.add_argument('profile_image' )
-        user_data_parser.add_argument('password', required=True, help="password is required" )
-
-        args = user_data_parser.parse_args()
+        args = user_request_parser.parse_args()
     
         args['user_type'] = USER_TYPES(args['user_type'])
         args['birthday'] = datetime.strptime(args['birthday'], '%Y-%m-%d')
@@ -93,11 +83,12 @@ class User(Resource):
         user_data_schema.validate(args)
         
         if user_data_schema.is_valid(args):
-            dbM.create_user(args, db)
-
-            return {
-                "message": "created"
-            }, 200
+            user = dbM.create_user(args, db)
+            if user:
+                return {
+                    "message": "created",
+                    "access_token": create_access_token(identity=user)
+                }, 200
         
         return {
             "message": "invalid data or incomplite data  data must contain [fname, lname, addre, email, tel,birthday, user-type, profile_image, password]" 
@@ -151,4 +142,5 @@ class Product(Resource):
         return {
             "message": "under dev"
         }
+
 
