@@ -1,7 +1,7 @@
 from .models import User
 from flask_sqlalchemy import SQLAlchemy
 from .schema import user_data_schema
-from .models import USER_TYPES, Product, Product_images, Cart, Cart_item
+from .models import USER_TYPES, Product, Product_images
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import current_user
