@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask_restful import Api
 
 
@@ -17,7 +17,7 @@ rest_api = Api(api)
 
 @api.route('/')
 def index():
-    return {"message": "Green hack team EUREKA API"}
+    return render_template('index.html')
 
 # register api resources 
 
