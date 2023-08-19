@@ -26,7 +26,6 @@ class User(db.Model):
     profile_image = db.Column(db.Text)
     password = db.Column(db.Text)
     products = db.relationship('Product', backref='user')
-    cart = db.relationship("Cart", backref='user')
     # organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
 
 
@@ -48,20 +47,7 @@ class User(db.Model):
         return check_password_hash(self.password, password)
 
 
-# class Organization(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.relationship('User', backref='organization')
-#     name = db.Column(db.String(30))
-#     desc = db.Column(db.Text)
-#     type = db.Column(db.String(30))
 
-#     @property
-#     def dict(self):
-#         return {
-#             'name': self.name,
-#             'desc': self.desc,
-#             'type': self.type
-#         }
 
 
         
@@ -86,35 +72,14 @@ class Product(db.Model):
             "id": self.id
         }  
 
-
-class Cart(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    card_items = db.relationship('Cart_item', backref='cart')
-
-    @property
-    def dict(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "cart_items": [item.dict for item in self.card_items]
-        }
-
-class Cart_item(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    created_at = db.Column(db.Date, default=datetime.utcnow())
-
-
-    @property
-    def dict(self):
-        return{
-            "id": self.id,
-            "product_id": self.product_id,
-            "created_at": str(self.created_at)
-        }
     
+# temp
+
+class Product_purchase(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id  = db.Column(db.Integer)
+    product_id  =  db.Column(db.Integer)
+    complete = db.Column(db.Boolean)
 
 
 
@@ -133,45 +98,6 @@ class Product_images(db.Model):
             "url": self.url,
             "id": self.id
         }
-
-
-
-
-
-
-
-# class Order_details(db.Model):
-#     id =  db.Column(db.Integer, primary_key=True)
-#     total = db.Column(db.Float)
-#     create_at = db.Column(db.Date, default=datetime.utcnow())
-#     modified_at = db.Column(db.Date, default=datetime.utcnow())
-#     user_id = db.relationship('User', backref='order_details') 
-#     payment_id = db.relationship('Payment_details', backref='order_details') 
-
-# class Order_item(db.Model):
-#     id =  db.Column(db.Integer, primary_key=True)
-#     quantity = db.Column(db.Integer)
-#     user_id = db.relationship('User', backref='order_item') 
-#     payment_id = db.relationship('Payment_details', backref='order_item') 
-#     order_id = db.relationship('Order_details', backref="order_item") 
-#     product_id = db.relationship("Product", backref="order_item") 
-
-
-# class Payment_details(db.Model):
-#     id =  db.Column(db.Integer, primary_key=True)
-#     order_id = db.relationship('Order_details', backref='payment_details')
-#     amount = db.Column(db.Float)
-#     status = db.Column(db.String(30))
-#     created_at = db.Column(db.Date, default=datetime.utcnow())
-#     modifid_at = db.Column(db.Date, default=datetime.utcnow())
-
-# class Cart(db.Model):
-#     pass 
-
-# class User_payment():
-#     pass
-
-
 
 
 

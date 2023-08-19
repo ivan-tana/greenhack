@@ -73,41 +73,6 @@ def get_images(product_id):
     return images
 
 
-def get_cart_items(user_id):
-    user_cart = Cart.query.filter_by(user_id = user_id).first()
-    if user_cart:
-        return user_cart.dict
-    
-    return []
-
-
-def add_item_to_card(user_id, product_id, db: SQLAlchemy):
-    cart = Cart.query.filter_by(user_id = user_id).first()
-    if cart:
-        new_cart_item = Cart_item(
-        cart_id=new_cart.id,
-        product_id=product_id)
-        try: 
-            db.session.add(new_cart_item)
-            db.session.commit()
-        except: return None
-    new_cart = Cart(user_id=user_id)
-
-    try:
-        db.session.add(new_cart)
-        db.session.commit()
-
-        new_cart_item = Cart_item(
-            cart_id=new_cart.id,
-            product_id=product_id
-        )
-        try: 
-            db.session.add(new_cart_item)
-            db.session.commit()
-        except: return None
-    except:
-        return None
-    return new_cart
     
 
 
