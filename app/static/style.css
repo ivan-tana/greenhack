@@ -1,9 +1,12 @@
+
+@import url('./page.css');
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     
 }
+
 
 
 /* variables */
@@ -17,7 +20,7 @@ body
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    background-color: #F5F5F7;
+    background-color: #FFFFFF;
 }
 
 
@@ -57,11 +60,12 @@ body
     left: 0;
     align-items: center;
     justify-content: center;
-    height:50px;
+    height:60px;
     background-color: rgba(255, 255, 255, 0.568);
     /* From https://css.glass */
     backdrop-filter: saturate(180%) blur(20px) !important;
     -webkit-backdrop-filter: saturate(180%) blur(20px);
+
 }
 
 .top-nav-bar .container 
@@ -103,7 +107,7 @@ body
     text-decoration: none;
     margin-left: 1.5rem;
     font-size: 600;
-    font-size: 14px;
+    font-size: 17px;
     color: black;
 
 }

@@ -18,7 +18,7 @@ from . import models
 
 
 def create_app(config_file='config.py'):
-    app = Flask("Green Hack")
+    app = Flask(__name__, template_folder='templates')
 
 
     # config app
@@ -26,6 +26,11 @@ def create_app(config_file='config.py'):
     
     # register blueprint
     app.register_blueprint(api_blueprint)
+
+
+    @app.route('/')
+    def home():
+        return render_template('index.html')
 
 
 
