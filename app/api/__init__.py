@@ -5,7 +5,7 @@ from flask_restful import Api
 
 
 from .resources import \
-    User, Product, Login, SingleUser, WhoAmI
+    User, Product, Login, SingleUser, WhoAmI, Product_image
 
 api = Blueprint('api', __name__)
 
@@ -26,6 +26,12 @@ rest_api.add_resource(User, '/user')
 rest_api.add_resource(Product, '/product')
 rest_api.add_resource(Login, '/login')
 rest_api.add_resource(WhoAmI, '/whoami')
+rest_api.add_resource(Product_image, '/product/<product_id>/image')
+
+
+
+
+
 
 
 

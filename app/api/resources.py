@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 from app import database_manipulations as dbM
 from app.extensions import db
 from app.schema import user_data_schema
-from app.models import USER_TYPES, User as UserM
+from app.models import USER_TYPES, User as UserM, Product as ProductM
 from app  import is_valid
 
 user_request_parser = reqparse.RequestParser()
@@ -24,6 +24,10 @@ user_request_parser.add_argument('birthday', required=True, help='birthday is re
 user_request_parser.add_argument('user_type',  required=True, help='user_type is required' )
 user_request_parser.add_argument('profile_image' )
 user_request_parser.add_argument('password', required=True, help="password is required" )
+user_request_parser.add_argument('country', required=True, help="country is required" )
+user_request_parser.add_argument('city', required=True, help="city is required" )
+
+
 
 
 class SingleUser(Resource):
@@ -124,16 +128,36 @@ class WhoAmI(Resource):
 
 class Product(Resource):
     def get(self):
-        return {
-            "message": "under dev"
-        }
-    
+        return dbM.get_product()
+    @jwt_required()
     def post(self):
+        product_parser = reqparse.RequestParser()
+
+        product_parser.add_argument('name', required=True, help='name required')
+        product_parser.add_argument('desc', required=True, help='desc required')
+        product_parser.add_argument('price', required=True, help='price required')
+        product_parser.add_argument('address', required=True, help='address required')
+        
+        args = product_parser.parse_args()
+
+        args['user_id'] = current_user.id
+
+        product = dbM.add_product(args, db)
+        if Product:
+            return {
+                "id": product.id,
+                "name": product.name,
+                "desc": product.desc,
+            }
+        
+        
+
         return {
-            "message": "under dev"
+            "message": "Faild to add product"
         }
 
     def put(self):
+        
         return {
             "message": "under dev"
         }
@@ -142,5 +166,75 @@ class Product(Resource):
         return {
             "message": "under dev"
         }
+
+
+
+class Product_image(Resource):
+    def get(self, product_id):
+        return dbM.get_images(product_id)
+    
+    @jwt_required()
+    def post(self, product_id):
+        if ProductM.query.get(product_id):
+            image_parser = reqparse.RequestParser()
+            image_parser.add_argument('url', required=True, help='url required')
+
+            args = image_parser.parse_args()
+
+            args['product_id'] = product_id
+
+            image = dbM.add_product_image(args, db)
+            if image:
+                return {
+                    'url': image.url
+                }
+        return {
+            "message": "product dose not exist"
+        }, 400
+
+
+        
+         
+
+
+# class Organization(Resource):
+#     def get(sefl):
+#         return dbM.get_organization()
+
+#     @jwt_required()
+#     def post(self):
+#         org_data_parser = reqparse.RequestParser()
+#         # name, desc, type
+#         org_data_parser.add_argument(
+#             'name',
+#             required=True,
+#             help = "name is required"
+#         )
+
+#         org_data_parser.add_argument(
+#             'desc',
+#             required=True,
+#             help='desc is required'
+#         )
+
+#         org_data_parser.add_argument(
+#             'type',
+#             required=True,
+#             help='type required'
+#         )
+
+#         args = org_data_parser.parse_args()
+
+#         args['user_id'] = current_user.id
+
+#         org = dbM.create_organization(args, db)
+#         if org:
+#             current_user.organization = org.id
+#             return {
+#                 "message": "organization created"
+#             }
+#         return {
+#             "message": " could not create organization"
+#         }
 
 
