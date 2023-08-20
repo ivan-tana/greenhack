@@ -67,7 +67,7 @@ class User(Resource):
         args = user_request_parser.parse_args()
     
         args['user_type'] = USER_TYPES(args['user_type'])
-        args['birthday'] = datetime.strptime(args['birthday'], '%d-%m-%y')
+        args['birthday'] = datetime.strptime(args['birthday'], '%y-%m-%d')
         args['password'] = generate_password_hash(args['password'])
         
  
