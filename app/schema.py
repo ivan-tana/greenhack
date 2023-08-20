@@ -7,7 +7,7 @@ user_data_schema = Schema({
     'fname': And(str, len),
     'lname': And(str, len),
     'address': And(str, len),
-    'active': bool,
+    Optional('active'): bool,
     'email': And(str, len),
     'user_type': USER_TYPES,
     Optional('profile_image'): str,
