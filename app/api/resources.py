@@ -71,6 +71,7 @@ class User(Resource):
         args['password'] = generate_password_hash(args['password'])
 
         args['active'] = True
+        args['profile_image'] = ''
         
  
         if not USER_TYPES(args['user_type']):
