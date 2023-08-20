@@ -5,5 +5,6 @@ python-dotenv
 gunicorn
 schema
 flask-jwt-extended
+pymysql
 pydantic
 psycopg2
