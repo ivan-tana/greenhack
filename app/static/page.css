@@ -1,7 +1,8 @@
 
 section {
     width: 100vw;
-    min-height: 90vh;
+    height: 90vh;
+    max-height: 1000px;
     padding: 4rem;
 }
 
