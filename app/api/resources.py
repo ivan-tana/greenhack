@@ -69,6 +69,8 @@ class User(Resource):
         args['user_type'] = USER_TYPES(args['user_type'])
         args['birthday'] = datetime.strptime(args['birthday'], '%d-%m-%Y')
         args['password'] = generate_password_hash(args['password'])
+
+        args['active'] = True
         
  
         if not USER_TYPES(args['user_type']):
