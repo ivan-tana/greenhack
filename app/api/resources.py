@@ -197,44 +197,4 @@ class Product_image(Resource):
          
 
 
-# class Organization(Resource):
-#     def get(sefl):
-#         return dbM.get_organization()
-
-#     @jwt_required()
-#     def post(self):
-#         org_data_parser = reqparse.RequestParser()
-#         # name, desc, type
-#         org_data_parser.add_argument(
-#             'name',
-#             required=True,
-#             help = "name is required"
-#         )
-
-#         org_data_parser.add_argument(
-#             'desc',
-#             required=True,
-#             help='desc is required'
-#         )
-
-#         org_data_parser.add_argument(
-#             'type',
-#             required=True,
-#             help='type required'
-#         )
-
-#         args = org_data_parser.parse_args()
-
-#         args['user_id'] = current_user.id
-
-#         org = dbM.create_organization(args, db)
-#         if org:
-#             current_user.organization = org.id
-#             return {
-#                 "message": "organization created"
-#             }
-#         return {
-#             "message": " could not create organization"
-#         }
-
 
